@@ -1,4 +1,4 @@
-VKR ?= vkr
+VKR ?= vkr2
 TALK ?= talk
 ENGINE ?= xelatex # Only `xelatex` or `lualatex` are allowed here
 
