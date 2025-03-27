@@ -258,7 +258,11 @@
                             {в форме \enquote{Производственное задание}}
                             {\ifthenelse{\equal{\my@title@kind@ru}{comparison}}
                                 {в форме \enquote{Сравнение}}
-                                {в форме \enquote{Теоретическое исследование}}
+                                {\ifthenelse{\equal{\my@title@kind@ru}{none}}
+                                    {}
+                                    {в форме \enquote{Теоретическое исследование}}
+                                }
+
                             }
                         }
                     }
