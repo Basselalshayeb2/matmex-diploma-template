@@ -11,6 +11,15 @@
 
 \documentclass[14pt, russian]{matmex-diploma-custom}
 
+\usepackage{fontspec}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{xfp}
+\geometry{margin=1in}
+\setmainfont{Times New Roman}
 
 \input{preamble.tex}
 
@@ -146,7 +155,7 @@ A_{41} & A_{42} & A_{43} & A_{44}
 
 Чтобы избежать хранения нулей, мы применили два различных варианта размещения элементов нижнетреугольной матрицы в памяти:
 
-\subsubsection*{Матрица A — блочно-построчное хранение (block-row order)}
+\subsubsection{Матрица A — блочно-построчное хранение (block-row order)}
 
 В этом представлении ненулевые элементы хранятся последовательно по строкам:
 
@@ -166,7 +175,7 @@ A_{41} & A_{42} & A_{43} & A_{44}
 \end{lstlisting}
 }
 
-\subsubsection*{Матрица B — блочно-по-столбцам (block-column order)}
+\subsubsection{Матрица B — блочно-по-столбцам (block-column order)}
 
 Для лучшего кэширования при блочном перемножении матрица B хранится в колонном порядке:
 
@@ -220,13 +229,13 @@ double* init_matrix_B() {
 
 В данной работе рассматриваются три версии алгоритма перемножения двух нижнетреугольных матриц. Каждая версия реализует один и тот же базовый алгоритм, но с различиями в представлении и доступе к элементам матриц, а также в методе блочной оптимизации.
 
-\subsection*{Общий алгоритм перемножения нижнетреугольных матриц}
+\subsection{Общий алгоритм перемножения нижнетреугольных матриц}
 Пусть $A$ и $B$ — нижнетреугольные матрицы размера $N \times N$. Тогда их произведение $C = AB$ также будет нижнетреугольной матрицей. Формула для вычисления элемента $C_{ij}$:
 \begin{equation}
 C_{ij} = \sum_{k=j}^{i} A_{ik} \cdot B_{kj}, \quad \text{где } 0 \leq j \leq i < N
 \end{equation}
 
-\subsection*{Версия 1: Двумерный массив без блочной оптимизации}
+\subsection{Версия 1: Двумерный массив без блочной оптимизации}
 {\footnotesize
 \begin{lstlisting}[language=C, caption={Алгоритм перемножения без блокировки для двумерных массивов}]
 void multiply_blocked(double **A, double **B, double ***C) {
@@ -241,7 +250,7 @@ void multiply_blocked(double **A, double **B, double ***C) {
 \end{lstlisting}
 }
 
-\subsection*{Версия 2: Двумерный массив с блочной оптимизацией}
+\subsection{Версия 2: Двумерный массив с блочной оптимизацией}
 {\footnotesize
 \begin{lstlisting}[language=C, caption={Алгоритм перемножения с блокировкой для двумерных массивов}]
 void multiply_blocked(double **A, double **B, double ***C) {
@@ -260,7 +269,7 @@ void multiply_blocked(double **A, double **B, double ***C) {
 \end{lstlisting}
 }
 
-\subsection*{Версия 3: Одномерные массивы с блочной оптимизацией и пользовательским доступом}
+\subsection{Версия 3: Одномерные массивы с блочной оптимизацией и пользовательским доступом}
 Для доступа к элементам A и B используются функции \texttt{get\_A} и \texttt{get\_B}, которые учитывают способ хранения (строчный и столбцовый порядки).
 
 {\footnotesize
@@ -286,7 +295,7 @@ void multiply_blocked(double *A, double *B, double *C) {
 \end{lstlisting}
 }
 
-\subsection*{Пример работы алгоритма}
+\subsection{Пример работы алгоритма}
 
 Рассмотрим пример перемножения двух нижнетреугольных матриц размера $3 \times 3$:
 
@@ -313,14 +322,14 @@ C_{21} = A_{20} B_{01} + A_{21} B_{11}
 C_{22} = A_{20} B_{02} + A_{21} B_{12} + A_{22} B_{22}
 \end{equation*}
 
-\subsection*{Вывод}
+\subsection{Вывод}
 Блочная оптимизация позволяет повысить эффективность использования кэш-памяти за счёт улучшения локальности данных. Использование одномерных массивов усложняет доступ к данным, но даёт преимущества при более эффективном использовании памяти.
 
-\section*{Доступ к элементам 1D-массивов}
+\section{Доступ к элементам 1D-массивов}
 
 При хранении нижнетреугольных матриц в виде одномерных массивов важно использовать корректные формулы для доступа к элементам.
 
-\subsection*{Матрица A (строчное хранение)}
+\subsection{Матрица A (строчное хранение)}
 
 Матрица A хранится в памяти по строкам. Чтобы получить элемент $A[i][j]$ (если $i \geq j$), используется формула:
 \begin{equation}
@@ -328,7 +337,7 @@ C_{22} = A_{20} B_{02} + A_{21} B_{12} + A_{22} B_{22}
 \end{equation}
 Если $i < j$, то $A[i][j] = 0$ (так как элемент вне нижнего треугольника).
 
-\subsection*{Матрица B (столбцовое хранение)}
+\subsection{Матрица B (столбцовое хранение)}
 
 Матрица B хранится по столбцам. Индекс для доступа к элементу $B[i][j]$ (если $i \geq j$):
 \begin{equation}
@@ -336,7 +345,7 @@ C_{22} = A_{20} B_{02} + A_{21} B_{12} + A_{22} B_{22}
 \end{equation}
 Если $i < j$, то $B[i][j] = 0$.
 
-\subsection*{Код реализации}
+\subsection{Код реализации}
 
 {\footnotesize
 \begin{lstlisting}[language=C, basicstyle=\ttfamily\footnotesize]
@@ -354,11 +363,11 @@ double get_B(double *B, int i, int j) {
 \end{lstlisting}
 }
 
-\section*{Измерение производительности и выбор размера блока}
+\section{Измерение производительности и выбор размера блока}
 
 Для оценки производительности алгоритма перемножения блочных нижнетреугольных матриц мы использовали стандартную функцию \texttt{clock()} из библиотеки \texttt{time.h}. Все замеры производились при фиксированном размере матрицы $N = 2880$ и различных размерах блоков.
 
-\subsection*{Фрагмент кода измерения времени}
+\subsection{Фрагмент кода измерения времени}
 
 {\footnotesize
 \begin{lstlisting}[language=C, basicstyle=\ttfamily\footnotesize]
@@ -370,56 +379,83 @@ printf("\nExecution time: %f seconds\n", cpu_time_used);
 \end{lstlisting}
 }
 
-\subsection*{Таблица с результатами}
+\subsection{Характеристики и компилятор}
+\begin{itemize}
+    \item \textbf{Компилятор:} GCC v.13.2.0, compiler option: \texttt{-Ofast}
+    \item \textbf{ОС:} Microsoft Windows 11 Pro (Version 10.0.22631 Build 22631)
+    \item \textbf{Процессор:} Intel® Core™ i7-10750H CPU @ 2.60GHz (up to 4.50 GHz Turbo)
+    \begin{itemize}
+        \item 6 ядер и 12 потоков
+        \item L2: 1.5 MB
+        \item L3: 12 MB
+    \end{itemize}
+    \item \textbf{Оперативная память (RAM):} 16 GB LPDDR4, clock speed: 2933 MHz
+\end{itemize}
 
-\begin{center}
-\begin{tabular}{|c|c|}
-\hline
-\textbf{Размер блока} & \textbf{Время выполнения (сек)} \\
-\hline
-16 & X.XXX \\
-32 & X.XXX \\
-48 & X.XXX \\
-64 & X.XXX \\
-96 & X.XXX \\
-128 & X.XXX \\
-\hline
-\end{tabular}
-\end{center}
+\section{Таблица с результатами}
+\begin{table}[h!]
+    \centering
+    \caption{Время выполнения (в секундах) для различных размеров блоков при $N = 2880$}
+    \begin{tabular}{@{}cccc@{}}
+    \toprule
+    \textbf{Размер блока} & \textbf{2D без блокировки} & \textbf{2D с блокировкой} & \textbf{1D с блокировкой} \\ \midrule
+    -     & 38.550  & -       & -       \\
+    30    & -       & 24.383  & 14.793  \\
+    60    & -       & 23.564  & 13.670  \\
+    90    & -       & 24.054  & 13.054  \\
+    120   & -       & 24.298  & 13.325  \\
+    180   & -       & 23.070  & 12.763  \\
+    240   & -       & \textbf{22.349}  & 12.538  \\
+    360   & -       & 23.558  & 12.243  \\
+    480   & -       & 24.411  & \textbf{12.195}  \\
+    720   & -       & 29.213  & 12.390  \\
+    1440  & -       & 35.138  & 12.722  \\
+    \bottomrule
+    \end{tabular}
+\end{table}
 
-\subsection*{График зависимости времени от размера блока}
+\vspace{1cm}
+\section{График сравнения производительности}
 
 \begin{center}
 \begin{tikzpicture}
 \begin{axis}[
-    width=12cm,
-    height=6cm,
+    width=14cm,
+    height=9cm,
     xlabel={Размер блока},
-    ylabel={Время (сек)},
-    grid=major,
-    ymin=0,
-    xtick={16,32,48,64,96,128},
-    ybar,
-    bar width=10pt
+    ylabel={Время выполнения (сек)},
+    legend style={at={(0.5,-0.2)}, anchor=north, legend columns=3},
+    ymajorgrids=true,
+    grid style=dashed,
+    xtick=data,
+    xticklabel style={rotate=45, anchor=east},
+    symbolic x coords={30,60,90,120,180,240,360,480,720,1440}
 ]
-\addplot coordinates {
-    (16, 2.45)
-    (32, 1.88)
-    (48, 1.67)
-    (64, 1.59)
-    (96, 1.61)
-    (128, 1.71)
+
+\addplot[color=red, mark=o] coordinates {
+    (30,24.383) (60,23.564) (90,24.054) (120,24.298) (180,23.070)
+    (240,22.349) (360,23.558) (480,24.411) (720,29.213) (1440,35.138)
 };
+\addlegendentry{2D с блочной оптимизацией}
+
+\addplot[color=blue, mark=triangle*] coordinates {
+    (30,14.793) (60,13.670) (90,13.054) (120,13.325) (180,12.763)
+    (240,12.538) (360,12.243) (480,12.195) (720,12.390) (1440,12.722)
+};
+\addlegendentry{1D с блочной оптимизацией}
+
+\addplot[color=black, dashed, thick] coordinates {
+    (30,38.55) (1440,38.55)
+};
+\addlegendentry{2D без блочной оптимизации}
+
 \end{axis}
 \end{tikzpicture}
 \end{center}
 
-\subsection*{Вывод}
+\section{Вывод}
 
 Наилучшее время показал размер блока $64$, при котором достигнута оптимальная балансировка между числом операций и эффективным использованием кэш-памяти. При слишком малых блоках увеличивается накладная нагрузка на циклы, а при слишком больших — снижается локальность данных.
 
-
-\section{Заключение}
-Проект MyGym направлен на создание удобной платформы для автоматизации управления фитнес-клубами. В документе изложены основные аспекты проекта, структура команды, сроки и критерии приемки. План будет обновляться по мере выполнения этапов.
 
 \end{document}
