@@ -457,5 +457,375 @@ printf("\nExecution time: %f seconds\n", cpu_time_used);
 
 Наилучшее время показал размер блока $64$, при котором достигнута оптимальная балансировка между числом операций и эффективным использованием кэш-памяти. При слишком малых блоках увеличивается накладная нагрузка на циклы, а при слишком больших — снижается локальность данных.
 
+\section{Приложение 1}
+{\footnotesize
+\begin{lstlisting}[language=C, caption={Приложение 1D массивов с блочной оптимизацией}]
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <time.h>
+    #include <math.h>
+    #include <malloc.h>
 
+    #define N 2880
+
+    int block_sizes[] = {30, 60, 90, 120, 180, 240, 360, 480, 720, 1440};
+    int num_block_sizes = sizeof(block_sizes) / sizeof(block_sizes[0]);
+
+    #define EL (N * (N + 1) /2)
+    // init matrix A (Lower triangular, stored in block-row order)
+    double* init_matrix_A() {
+        double *A = (double*)malloc(EL * sizeof(double));
+        for (int i = 0, k = 0; i < N; i ++) {
+            for (int j = 0; j <= i; j++, k++) {
+                A[k] = ((double)rand() / RAND_MAX) * 10.0;
+            }
+        }
+        return A;
+    }
+
+    // init matrix B (Lower triangular, stored in block-column order)
+    double* init_matrix_B() {
+        double *B = (double*)malloc(EL * sizeof(double));
+        for (int i = 0, k = 0; i < N; i++) {
+            for (int j = 0; j <= i; j++, k++) {
+                B[(j * (2 * N - j + 1)) / 2 + (i - j)] = ((double)rand() / RAND_MAX) * 10.0;
+            }
+        }
+
+        return B;
+    }
+
+    // matrix C (dense n×n)
+    double* init_matrix_C() {
+        double *C = (double*)calloc(N * N, sizeof(double));
+        return C;
+    }
+
+    // Access elements of A (stored in block-row order)
+    double get_A(double *A, int i, int j) {
+        if (i < j) return 0.0;
+        int index = (i * (i + 1)) / 2 + j;
+        return A[index];
+    }
+
+    // Access elements of B (stored in block-column order)
+    double get_B(double *B, int i, int j) {
+        if (i < j) return 0.0;
+        int index = (j * (2 * N - j + 1)) / 2 + (i - j);
+        return B[index];
+    }
+
+    void multiply_blocked_optimized(double *A, double *B, double *C, int block_size) {
+        for (int ii = 0; ii < N; ii += block_size) {
+            for (int jj = 0; jj <= ii; jj += block_size) {
+                for (int kk = jj; kk <= ii; kk += block_size) {
+                    // Determine actual block boundaries
+                    int i_end = fmin(ii + block_size, N);
+                    int j_end = fmin(jj + block_size, N);
+                    int k_end = fmin(kk + block_size, N);
+
+                    // Process current block
+                    for (int i = ii; i < i_end; i++) {
+                        for (int j = jj; j <= i && j < j_end; j++) {
+                            double sum = 0.0;
+                            int k_start = fmax(kk, j);
+                            for (int k = k_start; k <= i && k < k_end; k++) {
+                                // Direct access to matrix elements
+                                double a = A[(i*(i+1))/2 + k];
+                                double b = B[(j*(2*N-j+1))/2 + (k-j)];
+                                sum += a * b;
+                            }
+                            C[i*N + j] += sum;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Print functions
+    void print_matrix_A(double *M, int is_triangular) {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                double val = (is_triangular && j > i) ? 0.0 : get_A(M, i , j);
+                printf("%6.4f ", val);
+            }
+            printf("\n");
+        }
+    }
+
+    void print_matrix_B(double *M, int is_triangular) {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                double val = (is_triangular && j > i) ? 0.0 : get_B(M, i , j);
+                printf("%6.4f ", val);
+            }
+            printf("\n");
+        }
+    }
+
+    void print_matrix(double *M, int is_triangular) {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                double val = (is_triangular && j > i) ? 0.0 : M[i * N + j];
+                printf("%6.4f ", val);
+            }
+            printf("\n");
+        }
+    }
+
+    int main() {
+        srand(1);
+
+        // Initialize matrices (A is block-row, B is block-column)
+        double *A = init_matrix_A();
+        double *B = init_matrix_B();
+        // double *C = init_matrix_C();
+        double *C = (double*)_aligned_malloc(N * N * sizeof(double), 64);
+        for (int i = 0; i < N * N; i++) C[i] = 0.0;
+
+        clock_t start,end;
+        double cpu_time_used;
+
+        // printf("Matrix A (Lower Triangular, Block-Row Order):\n");
+        // print_matrix_A(A, 1);
+
+        // printf("\nMatrix B (Lower Triangular, Block-Column Order):\n");
+        // print_matrix_B(B, 1);
+
+        for (int idx = 0;idx < num_block_sizes; idx++) {
+            int BLOCK_SIZE = block_sizes[idx];
+
+            // Multiplication
+            start = clock();
+            multiply_blocked_optimized(A, B, C, BLOCK_SIZE);
+            end = clock();
+
+            // printf("\nResult Matrix C (Lower Triangular):\n");
+            // print_matrix(C, 1);
+
+            cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+            printf("\nBlock size: %d ,Execution time: %f seconds\n", BLOCK_SIZE, cpu_time_used);
+        }
+        // Free allocated memory
+        free(A);
+        free(B);
+        free(C);
+
+        return 0;
+    }
+
+\end{lstlisting}
+}
+\section{Приложение 2}
+{\footnotesize
+\begin{lstlisting}[language=C, caption={Приложение 2D массивов с блочной оптимизацией}]
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <time.h>
+
+    #define N 2880
+    //#define BLOCK_SIZE 4
+
+    int block_sizes[] = {30, 60, 90, 120, 180, 240, 360, 480, 720, 1440};
+    int num_block_sizes = sizeof(block_sizes) / sizeof(block_sizes[0]);
+
+    // Function to allocate memory for matrix A (Lower triangular)
+    double** init_matrix() {
+        double **A = (double**)malloc(N * sizeof(double*));
+        for (int i=0 ; i<N ; i++) {
+            A[i] = (double*)malloc(N * sizeof(double));
+        }
+        for (int i = 0;i<N;i++) {
+            for (int j = 0; j <= i; j++) {
+                A[i][j] = ((double)rand() / RAND_MAX) * 10.0;
+            }
+        }
+        return A;
+    }
+
+    // Function to allocate and initialize matrix C (dense n×n)
+    double** init_matrix_C() {
+        double **C = (double**)calloc(N, sizeof(double));
+        for (int i=0 ; i<N ; i++) {
+            C[i] = (double*)calloc(N, sizeof(double));
+        }
+
+        return C;
+    }
+
+    void multiply_blocked(double **A, double **B, double ***C, int BLOCK_SIZE) {
+        for (int bi = 0; bi < N; bi += BLOCK_SIZE) { // Block row
+            for (int bj = 0; bj <= bi; bj += BLOCK_SIZE) { // Block column
+                for (int i = bi; i < bi + BLOCK_SIZE && i < N; i++) {
+                    for (int j = bj; j <= i && j < bj + BLOCK_SIZE; j++) {
+                        for (int k = j; k <= i; k++) {
+                            (*C)[i][j] += A[i][k] * B[k][j];
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    void print_matrix(double **M) {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                printf("%6.4f ", M[i][j]);
+            }
+            printf("\n");
+        }
+    }
+
+    void free_matrix(double** A);
+
+    int main() {
+        // Initialization of arrays
+        srand(1);
+
+        double **A = init_matrix();
+        double **B = init_matrix();
+        double **C = init_matrix_C();
+        clock_t start,end;
+        double cpu_time_used;
+
+        // Print Matrixes
+        //printf("\nMatrix A (Lower Triangular, 2-dim Array):\n");
+        //print_matrix(A);
+
+        //printf("\nMatrix B (Lower Triangular, 2-dim Array):\n");
+        //print_matrix(B);
+
+        for (int idx = 0;idx < num_block_sizes; idx++) {
+            int BLOCK_SIZE = block_sizes[idx];
+
+            start = clock();
+
+            // Multiplication
+            multiply_blocked(A, B, &C, BLOCK_SIZE);
+
+            end = clock();
+            cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+
+            //printf("\nResult Matrix C (Lower Triangular, 2-dim Array):\n");
+            //print_matrix(C);
+
+            printf("\nBlock size: %d ,Execution time: %f seconds\n", BLOCK_SIZE,cpu_time_used);
+        }
+
+        free_matrix(A);
+        free_matrix(B);
+        free_matrix(C);
+
+        return 0;
+    }
+    void free_matrix(double** A){
+        for(int i = 0; i < N; i++) {
+            free(A[i]);
+        }
+        free(A);
+    }
+
+\end{lstlisting}
+}
+\section{Приложение 3}
+{\footnotesize
+\begin{lstlisting}[language=C, caption={Приложение 2D массивов без блочной оптимизации}]
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <time.h>
+
+    #define N 2880
+
+    // Function to allocate memory for matrix A (Lower triangular)
+    double** init_matrix() {
+        double **A = (double**)malloc(N * sizeof(double*));
+        for (int i=0 ; i<N ; i++) {
+            A[i] = (double*)malloc(N * sizeof(double));
+        }
+        for (int i = 0;i<N;i++) {
+            for (int j = 0; j <= i; j++) {
+                A[i][j] = ((double)rand() / RAND_MAX) * 10.0;
+            }
+        }
+        return A;
+    }
+
+    // Function to allocate and initialize matrix C (dense n×n)
+    double** init_matrix_C() {
+        double **C = (double**)calloc(N, sizeof(double));
+        for (int i=0 ; i<N ; i++) {
+            C[i] = (double*)calloc(N, sizeof(double));
+        }
+
+        return C;
+    }
+
+    void multiply_blocked(double **A, double **B, double ***C) {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j <= i; j++) {
+                for (int k = j; k <= i; k++) {
+                    (*C)[i][j] += A[i][k] * B[k][j];
+                }
+            }
+        }
+    }
+
+    void print_matrix(double **M) {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                printf("%6.4f ", M[i][j]);
+            }
+            printf("\n");
+        }
+    }
+
+    void free_matrix(double** A);
+
+    int main() {
+        // Initialization of arrays
+        srand(1);
+
+        double **A = init_matrix();
+        double **B = init_matrix();
+        double **C = init_matrix_C();
+        clock_t start,end;
+        double cpu_time_used;
+
+        // Print Matrixes
+        //printf("\nMatrix A (Lower Triangular, 2-dim Array):\n");
+        //print_matrix(A);
+
+        //printf("\nMatrix B (Lower Triangular, 2-dim Array):\n");
+        //print_matrix(B);
+
+        start = clock();
+
+        // Multiplication
+        multiply_blocked(A, B, &C);
+
+        end = clock();
+        cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+
+        //printf("\nResult Matrix C (Lower Triangular, 2-dim Array):\n");
+        //print_matrix(C);
+
+        printf("\nExecution time: %f seconds\n", cpu_time_used);
+
+        free_matrix(A);
+        free_matrix(B);
+        free_matrix(C);
+
+        return 0;
+    }
+    void free_matrix(double** A){
+        for(int i = 0; i < N; i++) {
+            free(A[i]);
+        }
+        free(A);
+    }
+
+\end{lstlisting}
+}
 \end{document}
