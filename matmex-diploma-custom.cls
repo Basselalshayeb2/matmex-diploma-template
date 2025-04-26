@@ -234,7 +234,7 @@
 
             \vspace*{0.25\textheight}
 
-            \ifthenelse{\equal{\my@title@type@ru}{coursework} \OR \equal{\my@title@type@ru}{practice} \OR \equal{\my@title@type@ru}{groupwork} \OR \equal{\my@title@type@ru}{production} \OR \equal{\my@title@type@ru}{prediploma}}
+            \ifthenelse{\equal{\my@title@type@ru}{coursework} \OR \equal{\my@title@type@ru}{practice} \OR \equal{\my@title@type@ru}{groupwork} \OR \equal{\my@title@type@ru}{singlework} \OR \equal{\my@title@type@ru}{production} \OR \equal{\my@title@type@ru}{prediploma}}
             {
             {\Huge \@title}
             \vskip 2em
@@ -249,7 +249,10 @@
                             {Отчёт по учебной практике}
                             {\ifthenelse{\equal{\my@title@type@ru}{groupwork}}
                                 {Отчёт по командному заданию}
-                                {Отчёт по преддипломной практике}
+                                {\ifthenelse{\equal{\my@title@type@ru}{singlework}}
+                                    {Отчет по индивидуальному заданию}
+                                    {Отчёт по преддипломной практике}
+                                }
                             }
                         }
                     }\\
@@ -359,7 +362,7 @@
 
             \vspace*{0.25\textheight}
 
-            \ifthenelse{\equal{\my@title@type@en}{coursework} \OR \equal{\my@title@type@en}{groupwork} \OR \equal{\my@title@type@en}{practice} \OR \equal{\my@title@type@en}{production} \OR \equal{\my@title@type@en}{prediploma}}
+            \ifthenelse{\equal{\my@title@type@en}{coursework} \OR \equal{\my@title@type@en}{groupwork} \OR \equal{\my@title@type@en}{singlework} \OR \equal{\my@title@type@en}{practice} \OR \equal{\my@title@type@en}{production} \OR \equal{\my@title@type@en}{prediploma}}
             {
             {\Large\textbf{\textit{\my@title@author@en}}}
             \vskip 2em
@@ -450,7 +453,7 @@
             \setlength{\footskip}{0pt}
             \maketitleru\addtocounter{titlepages}{1}
         }
-        \ifthenelse{\isundefined{\my@title@title@en} \OR \equal{\my@title@type@ru}{coursework} \OR \equal{\my@title@type@ru}{groupwork} \OR \equal{\my@title@type@ru}{practice} \OR \equal{\my@title@type@ru}{production} \OR \equal{\my@title@type@ru}{prediploma}}{}{
+        \ifthenelse{\isundefined{\my@title@title@en} \OR \equal{\my@title@type@ru}{coursework} \OR \equal{\my@title@type@ru}{groupwork} \OR \equal{\my@title@type@ru}{singlework} \OR \equal{\my@title@type@ru}{practice} \OR \equal{\my@title@type@ru}{production} \OR \equal{\my@title@type@ru}{prediploma}}{}{
             % fancyhdr already set height of the top/bottom headers on the previous page (titleru)
             % but on this page the headers' height might be different
             % so set them to zero again in order to make fancyhdr to do it
