@@ -1,0 +1,41 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{fontspec}
+\usepackage{titlesec}
+
+\setmainfont{Arial}t
+
+\titleformat{\section}[block]
+  {\normalfont\Large\bfseries\centering}{\thesection}{1em}{}
+
+\newcommand{\coursetitle}[1]{
+  \begin{center}
+    \vspace*{1cm}
+    {\Huge \textbf{#1}} \\
+    \vspace{0.5cm}
+    {\large Альшаеб Басель} \\
+    \vspace{1cm}
+    \rule{\textwidth}{1pt} \\
+    \vspace{1cm}
+  \end{center}
+}
+
+\begin{document}
+
+\coursetitle{Цифровая обработка сигнала}
+
+\section*{Screenshots}
+\begin{center}
+  \includegraphics[width=0.8\textwidth]{homework_summary.png} \\
+  \vspace{0.5cm}
+  \includegraphics[width=0.8\textwidth]{homework_1.png} \\
+  \vspace{0.5cm}
+  \includegraphics[width=0.8\textwidth]{homework_2.png} \\
+  \vspace{0.5cm}
+  \includegraphics[width=0.8\textwidth]{homework_3.png} \\
+  \vspace{0.5cm}
+
+\end{center}
+
+\end{document}
