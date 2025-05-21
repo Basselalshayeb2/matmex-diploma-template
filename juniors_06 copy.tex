@@ -1,0 +1,128 @@
+% !TEX TS-program = xelatex
+% !BIB program = bibtex
+% !TeX spellcheck = ru_RU
+
+% About magic macros see also
+% https://tex.stackexchange.com/questions/78101/
+
+% По умолчанию используется шрифт 14 размера.
+% Если Вы не влезаете в лимит страниц и нужен 12-й шрифт,
+% то уберите опцию [14pt]
+
+\documentclass[14pt, russian]{matmex-diploma-custom}
+
+
+\input{preamble.tex}
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+
+\begin{document}
+
+\input{junior_06_title.tex}
+\maketitle
+
+\section*{Задание}
+Выполнить идентификацию, анализ и учет в планировании рисков в выбранном проекте
+
+\section{Идентификация рисков}
+\begin{itemize}
+    \item Задержка в разработке ключевых модулей (frontend, backend).
+    \item Ошибки интеграции с внешними сервисами (платежные системы).
+    \item Перегрузка серверов из-за быстрого роста аудитории.
+    \item Сложности в маркетинговом продвижении.
+    \item Уход ключевых сотрудников в процессе реализации проекта.
+    \item Непредвиденные дополнительные расходы.
+    \item Юридические риски (например, нарушение законов о защите данных).
+\end{itemize}
+
+\section{Анализ рисков}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|p{7cm}|p{3cm}|p{3cm}|}
+    \hline
+    \textbf{Риск} & \textbf{Вероятность} & \textbf{Влияние} \\
+    \hline
+    Задержка в разработке & Средняя & Высокое \\
+    \hline
+    Ошибки интеграции с сервисами & Низкая & Среднее \\
+    \hline
+    Перегрузка серверов & Низкая & Высокое \\
+    \hline
+    Сложности в маркетинге & Средняя & Среднее \\
+    \hline
+    Уход ключевых сотрудников & Низкая & Высокое \\
+    \hline
+    Дополнительные расходы & Средняя & Среднее \\
+    \hline
+    Юридические риски & Низкая & Высокое \\
+    \hline
+    \end{tabular}
+    \caption{Анализ основных рисков проекта}
+    \end{table}
+
+    \subsection{Матрица влияния}
+
+    \begin{center}
+        \begin{tikzpicture}[x=2cm, y=2cm]
+
+        % Fill colors
+        \fill[green!30]  (0,0) rectangle (1,1);
+        \fill[green!30]  (1,0) rectangle (2,1);
+        \fill[yellow!50] (2,0) rectangle (3,1);
+        \fill[green!30]  (0,1) rectangle (1,2);
+        \fill[yellow!50] (1,1) rectangle (2,2);
+        \fill[yellow!50] (2,1) rectangle (3,2);
+        \fill[yellow!50] (0,2) rectangle (1,3);
+        \fill[yellow!50] (1,2) rectangle (2,3);
+        \fill[red!60]    (2,2) rectangle (3,3);
+
+        % Draw grid
+        \draw[gray] (0,0) grid (3,3);
+
+        % Risk entries (font=\scriptsize for better fitting)
+        \node[align=center, font=\scriptsize] at (1.5,2.5) {Задержка\\в разработке};
+        \node[align=center, font=\scriptsize] at (1.5,1.5) {Сложности\\в маркетинге};
+        \node[align=center, font=\scriptsize] at (1.5,0.5) {Дополнительные\\расходы};
+
+        \node[align=center, font=\scriptsize] at (0.5,1.5) {Ошибки\\интеграции};
+        \node[align=center, font=\scriptsize] at (0.5,2.5) {};
+        \node[align=center, font=\scriptsize] at (0.5,0.5) {};
+
+        \node[align=center, font=\scriptsize] at (2.5,2.5) {Перегрузка\\серверов};
+        \node[align=center, font=\scriptsize] at (2.5,0.5) {Уход\\ключевых\\сотрудников};
+        \node[align=center, font=\scriptsize] at (2.5,1.5) {Юридические\\риски};
+
+        % Axis titles
+        \node[rotate=90] at (-0.5,1.5) {\textbf{Вероятность}};
+        \node at (1.5,-0.5) {\textbf{Угроза}};
+
+        % X axis labels
+        \node at (0.5,-0.2) {Низкая};
+        \node at (1.5,-0.2) {Средняя};
+        \node at (2.5,-0.2) {Высокая};
+
+        % Y axis labels
+        \node[rotate=90] at (-0.2,0.5) {Низкое};
+        \node[rotate=90] at (-0.2,1.5) {Среднее};
+        \node[rotate=90] at (-0.2,2.5) {Высокое};
+
+        \end{tikzpicture}
+\end{center}
+
+\section{Учет рисков в планировании}
+
+\begin{itemize}
+    \item Для снижения риска задержек — внедрение методологии Agile (спринты, регулярные ревью), контроль прогресса на еженедельной основе.
+    \item Для ошибок интеграции — планирование отдельного этапа интеграционного тестирования до выхода в продакшн.
+    \item Для предотвращения перегрузки серверов — проектирование масштабируемой архитектуры с использованием облачных технологий (AWS, Azure).
+    \item Для решения маркетинговых сложностей — подготовка маркетинговой стратегии и резервного плана по продвижению.
+    \item Для минимизации последствий ухода сотрудников — документирование процессов и формирование пула возможных замен.
+    \item Для управления дополнительными расходами — выделение резервного бюджета в размере 10--15\% от общей сметы проекта.
+    \item Для снижения юридических рисков — консультации с юристами по вопросам защиты персональных данных и подготовки пользовательских соглашений.
+\end{itemize}
+
+
+
+\end{document}

@@ -280,7 +280,7 @@
             {}
             {
                 Научный руководитель:\\
-                \my@title@supervisorPosition@ru\ \my@title@supeteacherrvisor@ru\\
+                \my@title@supervisorPosition@ru\ \my@title@supervisor@ru\\
             }}
             {
                 Преподаватель:\\
