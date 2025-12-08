@@ -109,8 +109,8 @@ Symfony\cite{symfony2005release} первым попытался решить э
 
 \begin{itemize}
     \item Symfony HttpFoundation \cite{symfonyhttpfoundation},
-    \item Zend\Http \cite{zendhttp} (Request / Response).
-    \item Slim\Http \cite{slimhttp}.
+    \item Zend\\Http \cite{zendhttp} (Request / Response).
+    \item Slim\\Http \cite{slimhttp}.
     \item Собственные реализации в CakePHP \cite{cakephphttp}.
 \end{itemize}
 
@@ -129,23 +129,46 @@ Symfony\cite{symfony2005release} первым попытался решить э
 
 \subsection{Отсутствие единых правил автозагрузки и зависимостей}
 
-До релиза Composer (2012) и PSR-4 (2013–2014):
+До релиза Composer \cite{seldaek2012composer} (2012) и PSR-4 \cite{psr4standard} (2013–2014):
 
-большинство библиотек подключались вручную через require,
+\begin{itemize}
+    \item Большинство библиотек подключались вручную через \texttt{require} или \texttt{include}.
+    \item Не было декларативного управления зависимостями.
+    \item Поставка кода происходила через ZIP-архивы или PEAR (который плохо поддерживался и был неинтуитивен).
+\end{itemize}
 
-не было декларативного управления зависимостями,
+\texttt{Autoloading} был одной из самых болезненных частей PHP-разработки:
 
-поставка кода происходила через ZIP-архивы или PEAR (который плохо поддерживался и был неинтуитивен).
+\begin{itemize}
+    \item Фреймворки требовали строгих соглашений по структуре каталогов.
+    \item Библиотеки не могли легко объявлять свои зависимости.
+    \item Конфликты версий были обычным делом.
+\end{itemize}
 
-Autoloading был одной из самых болезненных частей PHP-разработки:
+Composer \cite{seldaek2012composer} радикально изменил эту ситуацию, но его широкое принятие началось только после 2014–2015 — и именно этот период стал отправной точкой изменений, анализируемых далее.
 
-фреймворки требовали строгих соглашений по структуре каталогов;
+\subsection{Проблемы тестируемости и внедрения зависимостей}
+До принятия PSR-11 \cite{psr11standard} (Container Interface) каждый фреймворк реализовывал собственный DI-контейнер, и ни один из них не был совместим с другим:
 
-библиотеки не могли легко объявлять свои зависимости;
+\begin{itemize}
+    \item Symfony DependencyInjection \cite{symfonydependencyinjection}.
+    \item Laravel Container \cite{laravelcontainer}.
+    \item Zend\\ServiceManager \cite{zendservicemanager}.
+    \item Pimple \cite{pimple}.
+\end{itemize}
 
-конфликты версий были обычным делом.
+Отсутствие общего интерфейса:
 
-Composer радикально изменил эту ситуацию, но его широкое принятие началось только после 2014–2015 — и именно этот период стал отправной точкой изменений, анализируемых далее.
+\begin{itemize}
+    \item Усложняло создание многоразовых пакетов.
+    \item Делало невозможным перенос middleware-компонентов.
+    \item Тормозило развитие архитектур, основанных на инверсии управления.
+\end{itemize}
+
+Архитектура DI\footnote{
+    \textbf{DI — Dependency Injection}.
+    Внедрение зависимостей: объект получает свои зависимости извне, а не создаёт их самостоятельно.
+    } была одной из ключевых болевых точек, которую индустрия смогла решить только в последние 10 лет (2015–2025), в ходе стандартизации PSR-11 \cite{psr11standard}.
 
 \setmonofont{CMU Typewriter Text}
 \bibliographystyle{ugost2008ls}
