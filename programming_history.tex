@@ -11,6 +11,12 @@
 
 \documentclass[14pt, russian]{matmex-diploma-custom}
 \usepackage{listings}
+\usepackage{xcolor}
+
+\newcommand{\graybox}[1]{%
+  \colorbox{lightgray}{\strut #1}%
+}
+
 
 \input{preamble.tex}
 
@@ -563,6 +569,35 @@ PSR-14 \cite{psr14standard} был принят в 2019 году, но его р
 \subsubsection*{Итог}
 PSR-14 принят, но в экосистеме остаётся «вторичным» стандартом.
 Существенная часть сообществ его игнорирует.
+
+\subsection{Попытка создания PSR для валидаторов и форм}
+Это обсуждение велось эпизодически с 2016 по 2021 годы \cite{figvalidationdiscussion}.
+
+\subsubsection*{Мотивация}
+\begin{itemize}
+    \item Symfony Form + Validator имеют сложную, но зрелую модель \cite{symfonyform, symfonyvalidator}.
+    \item Laravel Validation — декларативная модель со строковыми правилами \cite{laravelvalidation}.
+    \item Respect/Validation — функциональная библиотека \cite{respectvalidation}.
+\end{itemize}
+Наличие множества несовместимых подходов порождало предложение создать переносимый стандарт.
+
+\subsubsection*{Причины отказа}
+\begin{itemize}
+    \item Слишком разный уровень абстракции.
+    \item Слишком разный DSL.\\
+    Сравните:
+    \begin{itemize}
+        \item \graybox{'required|min:6'} (Laravel),
+        \item \graybox{new Length(['min'=>6])} (Symfony),
+        \item \graybox{v::stringType()->length(6)} (Respect).
+    \end{itemize}
+    \item Нежелание ограничивать инновации.\\
+    Фреймворки активно экспериментируют со схемами данных.
+\end{itemize}
+
+\subsubsection*{Итог}
+PSR для валидаторов и форм был признан нежизнеспособным.
+
 
 
 
