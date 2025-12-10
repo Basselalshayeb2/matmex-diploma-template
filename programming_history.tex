@@ -366,37 +366,92 @@ Middleware стала центральной архитектурной един
 
 \subsection{Влияние PHP 7 и PHP 8 на архитектуру фреймворков}
 
-PHP 7 (2015)
+\subsubsection{PHP 7 (2015)}
 
-увеличение производительности в 2–3 раза,
+\begin{itemize}
+    \item увеличение производительности в 2–3 раза.
+    \item строгая модель ошибок (движение от предупреждений к исключениям).
+    \item scalar type hints, return types.
+\end{itemize}
 
-строгая модель ошибок (движение от предупреждений к исключениям),
+\subsubsection{PHP 8 (2020)}
 
-scalar type hints, return types.
+\begin{itemize}
+    \item union types.
+    \item attributes.
+    \item match.
+    \item JIT.
+    \item улучшенная типобезопасность.
+\end{itemize}
 
-PHP 8 (2020)
+\subsubsection{Результаты для фреймворков}
 
-union types,
-
-attributes,
-
-match,
-
-JIT,
-
-улучшенная типобезопасность.
-
-Последствия для фреймворков
-
-Symfony 3/4 переписали DI-контейнер под строгую типизацию,
-
-Laravel стал массово переходить к типизированным сигнатурам,
-
-появилась культура строгих DTO, value objects, immutable объектов,
-
-фреймворки сократили магию и усилили контрактность API.
+\begin{itemize}
+    \item Symfony 3/4 \cite{symfonydependencyinjection} переписали DI-контейнер под строгую типизацию.
+    \item Laravel \cite{laraveldocs} стал массово переходить к типизированным сигнатурам.
+    \item Появилась культура строгих DTO, value objects, immutable объектов.
+    \item Фреймворки сократили магию и усилили контрактность API.
+\end{itemize}
 
 Типизация стала центральным архитектурным трендом 2020-х годов.
+
+\subsection{Symfony: эволюция компонентной модели}
+
+Symfony стал главным драйвером стандартизации.
+
+\subsubsection{Основные изменения}
+
+\begin{itemize}
+    \item переход от «полного фреймворка» к компонентам \cite{fabpot2012symfonycomponents} (HttpFoundation, EventDispatcher, Console, Routing).
+    \item адаптация архитектуры под PSR-7/PSR-11 \cite{symfonypsr7bridges, psr11standard}.
+    \item внедрение autowiring и автоконфигурации.
+    \item появление Symfony Flex как современного пакета приложений.
+\end{itemize}
+\subsubsection{Результаты}
+
+Большинство фреймворков (включая Laravel \cite{laraveldocs}) стали использовать компоненты Symfony либо идеологию Symfony:
+
+\begin{itemize}
+    \item HttpKernel → архитектурный эталон.
+    \item EventDispatcher → основа для гибких систем расширения.
+\end{itemize}
+
+Symfony стал «стандартной библиотекой» для PHP вне ядра языка.
+
+
+
+\subsection{Laravel: эволюция DX и влияние стандартов}
+
+Laravel \cite{laraveldocs} (2011) стал главным популяризатором:
+
+\begin{itemize}
+    \item единообразных API.
+    \item конвенций.
+    \item быстрой разработки (DX-first).
+\end{itemize}
+
+В период 2015–2025:
+
+\subsubsection{Основные изменения}
+
+\begin{itemize}
+    \item переход на PSR-4, Composer и частично PSR-11.
+    \item внедрение middleware-модели совместимой с PSR-15.
+    \item адаптация к PHP 7/8 (типизация, атрибуты).
+    \item появление Horizon, Octane, Sail, Pint — инфраструктурных компонентов.
+    \item более строгая структура маршрутизации и DI.
+\end{itemize}
+
+\subsubsection{Результаты}
+
+Laravel \cite{laraveldocs} стал «массовым воплощением» стандартизированной экосистемы PHP:
+
+\begin{itemize}
+    \item он интегрирует PSR-совместимые библиотеки.
+    \item служит входной точкой для новых разработчиков.
+    \item влияет на индустриальные практики (DX, миграции, Eloquent как ORM-эталон).
+\end{itemize}
+
 
 \setmonofont{CMU Typewriter Text}
 \bibliographystyle{ugost2008ls}
