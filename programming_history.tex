@@ -10,7 +10,7 @@
 % то уберите опцию [14pt]
 
 \documentclass[14pt, russian]{matmex-diploma-custom}
-
+\usepackage{listings}
 
 \input{preamble.tex}
 
@@ -451,6 +451,119 @@ Laravel \cite{laraveldocs} стал «массовым воплощением» 
     \item служит входной точкой для новых разработчиков.
     \item влияет на индустриальные практики (DX, миграции, Eloquent как ORM-эталон).
 \end{itemize}
+
+
+\section{Отвергнутые и отложенные изменения}
+
+Как и в случае с другими зрелыми технологиями, процесс стандартизации PHP-фреймворков сопровождался многочисленными предложениями, не вошедшими в финальные версии PSR-стандартов или отложенными на неопределённый срок.
+
+Эти обсуждения позволяют понять, какие архитектурные решения были сочтены слишком узкими, слишком рискованными или концептуально несовместимыми с направлением развития экосистемы.
+
+Ниже рассмотрены наиболее значимые инициативы, не приведшие к формированию стандарта.
+
+\subsection{Несостоявшийся PSR для маршрутизации (Router PSR)}
+
+Одним из регулярно поднимаемых предложений в рассылках PHP-FIG \cite{figrouterdiscussion} начиная с 2015 года было создание стандарта для роутинга HTTP-запросов.
+
+\subsubsection{Причины появления инициативы}
+
+Фреймворки использовали разные архитектуры маршрутов:
+
+\begin{itemize}
+    \item Laravel применяет декларативную синтаксическую модель (fluent API) \cite{laravelrouting}.
+    \item Symfony использует аннотации, YAML и PHP-конфигурации \cite{symfonyrouting}.
+    \item Slim и Mezzio строят маршрутизацию вокруг middleware \cite{slimrouting}.
+    \item FastRoute — чисто функциональная библиотека без привязки к фреймворку \cite{fastroute}.
+\end{itemize}
+
+Отсутствие общего интерфейса приводило к невозможности создать:
+
+\begin{itemize}
+    \item единый набор middleware для маршрутизации.
+    \item универсальные инструменты тестирования маршрутов.
+    \item переносимые роутинговые DSL.
+\end{itemize}
+
+\subsubsection{Причины отказа}
+В обсуждениях FIG (2016–2018) было выявлено несколько проблем:
+
+\subsubsection*{Различие моделей маршрутизации}
+Одни фреймворки используют controller-based архитектуру (Laravel \cite{laravelrouting}, Symfony \cite{symfonyrouting}), другие (например Slim \cite{slimrouting}, Mezzio) используют middleware-based архитектуру.
+Приведение этих моделей к единому интерфейсу оказалось практически невозможным.
+
+\subsubsection*{Слишком высокий уровень абстракции}
+Любой интерфейс становился либо:
+\begin{itemize}
+    \item слишком низкоуровневым (и не решал задачи).
+    \item либо слишком высоким.
+\end{itemize}
+\subsubsection*{Стандарт рисковал закрепить устаревший подход}
+FIG избегает «навязывать» архитектурные решения, чтобы не мешать инновациям.
+
+\subsubsection*{Итог}
+Инициатива была закрыта как слишком сложная и недостаточно универсальная.
+Разработчики договорились, что роутинг останется частью каждого фреймворка, а интеграции будут строиться через PSR-7 \cite{psr7standard} и PSR-15 \cite{psr15standard}.
+
+\subsection{Попытка создать PSR для ORM и абстракции работы с базами данных}
+
+Регулярно обсуждалось создание стандарта для доступа к данным аналога JDBC для Java.
+Попытки разработать единый интерфейс для ORM поднимались в рассылке PHP-FIG с 2014 по 2020 год \cite{figormdiscussion}.
+
+\subsubsection*{Мотивация}
+
+\begin{itemize}
+    \item Множество несовместимых ORM: Doctrine ORM \cite{doctrineorm}, Eloquent ORM \cite{eloquentorm}, Propel \cite{propelorm}, RedBeanPHP \cite{redbeanphp}.
+    \item Попытки создать стандартный QueryBuilder или EntityManager обсуждались с 2014 по 2020 год.
+\end{itemize}
+
+
+\subsubsection*{Причины отказа}
+\begin{itemize}
+    \item Слишком разные философии данных.
+    \begin{itemize}
+        \item Doctrine — ориентирована на DDD и Unit of Work.
+        \item Eloquent — ActiveRecord и stateful-модель.
+        \item Propel — XML-генерация моделей.
+        \item RedBean — динамические схемы.
+    \end{itemize}
+    \item Разработчики ORM не готовы к унификации.\\
+    Doctrine имеет строгую архитектуру, Laravel — гибкую, Eloquent использует «магические» свойства.
+    \item Бо́льшая часть индустрии предпочитает свободу.\\
+    FIG не хотел повторить опыт Java EE, где стандарты замедляли эволюцию ORM.
+\end{itemize}
+
+\subsubsection*{Итог}
+
+PSR для ORM был признан нежизнеспособным.
+
+
+\subsection{PSR-14 (Event Dispatcher): стандарт, который останется частичным}
+PSR-14 \cite{psr14standard} был принят в 2019 году, но его разработка сопровождалась огромным количеством противоречий в рассылках PHP-FIG \cite{figpsr14discussion}.
+
+\subsubsection*{Проблемы}
+\begin{itemize}
+    \item Фреймворки используют разные event models.
+    \begin{itemize}
+        \item Symfony: синхронный диспетчер событий, на основе объектных слушателей \cite{symfonyevents}.
+        \item Laravel: разделение событий и слушателей + очередь + broadcast \cite{laravalevents}.
+        \item Zend Framework: агрегаторы событий \cite{zendEventManager}.
+    \end{itemize}
+    Найти общую модель оказалось крайне трудно.
+    \item Глубокие различия в семантике слушателей.\\
+    Например, прекращение обработки событий отсутствует во многих системах.
+    \item Слишком узкий охват стандарта.\\
+    PSR-14 определяет слишком абстрактный интерфейс:
+    \begin{lstlisting}[language=php]
+    interface EventDispatcherInterface \{
+        public function dispatch(object $event): object;
+    \}
+    \end{lstlisting}
+\end{itemize}
+
+\subsubsection*{Итог}
+PSR-14 принят, но в экосистеме остаётся «вторичным» стандартом.
+Существенная часть сообществ его игнорирует.
+
 
 
 \setmonofont{CMU Typewriter Text}
