@@ -1,29 +1,57 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
   <diagram name="Page-1" id="NYrALsNlXSZurDFsi9Zc">
-    <mxGraphModel dx="623" dy="571" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="517" dy="575" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="Vhr2fe9CxvnkO7d5g0GQ-1" value="" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
-          <mxGeometry x="260" y="270" width="120" height="60" as="geometry" />
+        <mxCell id="ZF8gaxuw4jjyr6VTaV9e-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Vhr2fe9CxvnkO7d5g0GQ-4" target="Vhr2fe9CxvnkO7d5g0GQ-5">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="Vhr2fe9CxvnkO7d5g0GQ-2" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="260" y="270" width="120" height="60" as="geometry" />
+        <mxCell id="Vhr2fe9CxvnkO7d5g0GQ-4" value="&lt;h2&gt;Браузер врача&lt;/h2&gt;&lt;div style=&quot;text-align: left;&quot;&gt;Web Audio API (микрофон)&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;VAD сегментация речи&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;HTTP multipart (file)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="525" width="280" height="150" as="geometry" />
         </mxCell>
-        <mxCell id="Vhr2fe9CxvnkO7d5g0GQ-3" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="260" y="270" width="120" height="60" as="geometry" />
+        <mxCell id="ZF8gaxuw4jjyr6VTaV9e-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;exitX=1;exitY=0.813;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="Vhr2fe9CxvnkO7d5g0GQ-5" target="Vhr2fe9CxvnkO7d5g0GQ-6">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="Vhr2fe9CxvnkO7d5g0GQ-4" value="&lt;h2&gt;Браузер врача&lt;/h2&gt;&lt;div&gt;Web Audio API (микрофон)&lt;/div&gt;&lt;div&gt;VAD сегментация речи&lt;/div&gt;&lt;div&gt;лёгкий фильтр: command/junk&lt;/div&gt;&lt;div&gt;HTTP multipart (file)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="40" y="500" width="280" height="150" as="geometry" />
+        <mxCell id="Vhr2fe9CxvnkO7d5g0GQ-5" value="&lt;h2&gt;Backend (Flask)&lt;/h2&gt;&lt;div style=&quot;text-align: left;&quot;&gt;Приём/upload&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;Ffmpeg - Ogg/Opus&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;Wake-word check (ASR)&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;Маршрутизация&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="400" y="500" width="280" height="200" as="geometry" />
         </mxCell>
-        <mxCell id="Vhr2fe9CxvnkO7d5g0GQ-5" value="&lt;h2&gt;Backend (Flask)&lt;/h2&gt;&lt;div&gt;Приём/upload&lt;/div&gt;&lt;div&gt;Ffmpeg - Ogg/Opus&lt;/div&gt;&lt;div&gt;Wake-word check (ASR)&lt;/div&gt;&lt;div&gt;Маршрутизация&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="400" y="500" width="280" height="150" as="geometry" />
+        <mxCell id="Vhr2fe9CxvnkO7d5g0GQ-6" value="&lt;h2&gt;LLM/NLU&lt;/h2&gt;&lt;div style=&quot;text-align: left;&quot;&gt;qwen3-235b-a22b-fp8&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;json intent/slots&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="770" y="640" width="280" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="Vhr2fe9CxvnkO7d5g0GQ-6" value="&lt;h2&gt;Backend (Flask)&lt;/h2&gt;&lt;div&gt;Приём/upload&lt;/div&gt;&lt;div&gt;Ffmpeg - Ogg/Opus&lt;/div&gt;&lt;div&gt;Wake-word check (ASR)&lt;/div&gt;&lt;div&gt;Маршрутизация&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="400" y="700" width="280" height="150" as="geometry" />
+        <mxCell id="ZF8gaxuw4jjyr6VTaV9e-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="ZF8gaxuw4jjyr6VTaV9e-1" target="Vhr2fe9CxvnkO7d5g0GQ-6">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="Vhr2fe9CxvnkO7d5g0GQ-7" value="&lt;h2&gt;Backend (Flask)&lt;/h2&gt;&lt;div&gt;Приём/upload&lt;/div&gt;&lt;div&gt;Ffmpeg - Ogg/Opus&lt;/div&gt;&lt;div&gt;Wake-word check (ASR)&lt;/div&gt;&lt;div&gt;Маршрутизация&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="760" y="500" width="280" height="150" as="geometry" />
+        <mxCell id="ZF8gaxuw4jjyr6VTaV9e-3" value="текст" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ZF8gaxuw4jjyr6VTaV9e-2">
+          <mxGeometry x="-0.1238" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZF8gaxuw4jjyr6VTaV9e-1" value="&lt;h2&gt;ASR&lt;/h2&gt;&lt;div style=&quot;text-align: left;&quot;&gt;Yandex SpeechKit&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;=&amp;gt; транскрипция&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="770" y="500" width="280" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="ZF8gaxuw4jjyr6VTaV9e-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.011;entryY=0.581;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1.001;exitY=0.264;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="Vhr2fe9CxvnkO7d5g0GQ-5" target="ZF8gaxuw4jjyr6VTaV9e-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZF8gaxuw4jjyr6VTaV9e-5" value="OGG" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ZF8gaxuw4jjyr6VTaV9e-4">
+          <mxGeometry x="-0.2216" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZF8gaxuw4jjyr6VTaV9e-7" value="текст + контекст" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="680" y="610" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ZF8gaxuw4jjyr6VTaV9e-9" value="аудиосегмент" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="310" y="568" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ZF8gaxuw4jjyr6VTaV9e-10" value="&lt;h2&gt;МИС &amp;lt;&amp;lt;СТОММИС&amp;gt;&amp;gt;&lt;/h2&gt;&lt;div style=&quot;text-align: left;&quot;&gt;REST API: применение действий&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;Справочники (диагнозы, процедуры)&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;Карточка пациента&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="760" width="400" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="ZF8gaxuw4jjyr6VTaV9e-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.123;entryY=-0.019;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="Vhr2fe9CxvnkO7d5g0GQ-5" target="ZF8gaxuw4jjyr6VTaV9e-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZF8gaxuw4jjyr6VTaV9e-12" value="json" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="535" y="710" width="50" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
