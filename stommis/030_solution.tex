@@ -149,13 +149,13 @@ VAD выдаёт события начала и окончания речи, а 
 
 \paragraph{Схема допустимого вывода.}
 Для обеспечения воспроизводимости и проверки корректности используется схема (упрощённый вариант):
-\begin{verbatim}
-intent: enum[ set_diagnosis, set_tooth_state, add_procedure, cancel, ... ]
+\begin{lstlisting}[breaklines=true]
+intent: enum[set\_diagnosis, set\_tooth\_state, add\_procedure, cancel, ...]
 slots:  object (зависит от intent)
 confidence: number [0..1]
 needs_clarification: boolean
 clarification_question: string (optional, only if needs_clarification=true)
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{Пример интерпретации команды.}
 Пусть врач произносит: \textit{«Зуб 26: кариес. Добавь пломбу.»}.
@@ -187,19 +187,23 @@ clarification_question: string (optional, only if needs_clarification=true)
 \textbf{(1) инструкцию} (системное сообщение), \textbf{(2) ввод} (контекст, добавляемый к пользовательской команде), и \textbf{(3) инструменты} (tool-вызовы для получения допустимых значений из предметной области).
 Сервер принимает результат \emph{только} при успешной валидации JSON по схеме и принадлежности значений разрешённым множествам.
 
-\subparagraph{Инструкция (правила работы и формат вывода).}
+\subparagraph{Системная инструкция и формат вывода.}
 Системная инструкция фиксирует назначение модели, запрещает свободный текст и задаёт формат результата согласно схеме из предыдущего пункта.
 Упрощённый фрагмент инструкции:
 
 \begin{verbatim}
-    Ты - часть процедуры обработки данных первичного осмотра пациентов. Тебе будут приходить запросы вида:
-    1. Команда пользователя (распознанная и переведенная в текст речь врача при осмотре)
-    2. Пронумерованный список вариантов обработки этой команды (в том виде, который понятен информационной системе)
+    Ты - часть процедуры обработки данных первичного осмотра пациентов.
+    Тебе будут приходить запросы вида:
+    1. Команда пользователя (распознанная речь врача)
+    2. Пронумерованный список вариантов обработки этой команды
 
-    Необходимо в соответствие с командой, полученной от врача, выбрать наилучшие варианты ее обработки из списка и вернуть их список в структурированном виде,
-    соответствующим следующей JSON схеме:
+    Необходимо выбрать наилучшие варианты и вернуть результат
+    в формате JSON:
+\end{verbatim}
+\begin{lstlisting}[breaklines=true, basicstyle=\ttfamily\small]
+
     {
-        "$schema": "http://json-schema.org/draft-07/schema#",
+        "schema": "http://json-schema.org/draft-07/schema",
         "type": "array",
         "items": {
             "type": "object",
@@ -211,10 +215,10 @@ clarification_question: string (optional, only if needs_clarification=true)
                 "to_delete": { "type": "integer" }
             },
             "required": ["id", "chosen_option", "V", "ABC", "Z", "to_delete"],
-            "additionalProperties": False       #
+            "additionalProperties": False,
         }
     }
-\end{verbatim}
+\end{lstlisting}
 
 \subparagraph{Инструменты (tool) для зубной карты.}
 Для сценариев заполнения зубной формулы LLM получает доступ к инструменту, возвращающему допустимые действия и параметры
